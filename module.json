@@ -1,11 +1,14 @@
 {
-  "id": "inline-roll-cmd",
-  "title": "Inline Roll Commands",
+  "id": "inline-roll-cmd-actor-arg",
+  "title": "Inline Roll Commands (with explicit actorId arg)",
   "description": "Inline Roll Commands lets you create buttons, like deferred inline rolls, to perform commands like rolling a skill.",
   "authors": [
     {
       "name": "kaelad",
       "discord": "kaelad#1693"
+    },
+    {
+      "name": "Filip Piechowski"
     }
   ],
   "version": "0.1",
