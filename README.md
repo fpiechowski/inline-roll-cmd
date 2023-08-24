@@ -1,4 +1,6 @@
-# Inline Roll Commands
+# Inline Roll Commands (with explicit actorId arg)
+
+(I want to change it so that the second arg is always actorId instead of using the selected token's actor, command should look like `[[/rollSkill skill actorId]]{flavor}`)
 
 This module lets you create buttons in item descriptions, chat messages, or journal entries to trigger commands. They look very similar to the deferred inline roll buttons you can create with core Foundry. They also have a similar syntax, making them easy to use and you can use them in the same places.
 
