@@ -186,8 +186,6 @@ async function onClick(event) {
   event.preventDefault();
   const a = event.currentTarget;
 
-  // Get the tokens to roll with (like the Saving Throw button)
-  const tokens = dnd5e.documents.Item5e._getChatCardTargets();
   // get the rollMode, leave undefined for roll so the chat log setting is used
   const rollMode = a.dataset.mode === "roll" ? undefined : a.dataset.mode;
 
@@ -197,32 +195,26 @@ async function onClick(event) {
 
   switch (a.dataset.func) {
     case "skill":
-      for (const token of tokens) {
-        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
-        await actor.rollSkill(a.dataset.skillId, { event, flavor, rollMode, speaker });
-      }
+      const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
+      await actor.rollSkill(a.dataset.skillId, { event, flavor, rollMode, speaker });
       break;
     case "abilityCheck":
-      for (const token of tokens) {
-        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
-        await actor.rollAbilityTest(a.dataset.abilityId, {
-          event,
-          flavor,
-          rollMode,
-          speaker,
-        });
-      }
+      const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
+      await actor.rollAbilityTest(a.dataset.abilityId, {
+        event,
+        flavor,
+        rollMode,
+        speaker,
+      });
       break;
     case "save":
-      for (const token of tokens) {
-        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
-        await actor.rollAbilitySave(a.dataset.abilityId, {
-          event,
-          flavor,
-          rollMode,
-          speaker,
-        });
-      }
+      const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
+      await actor.rollAbilitySave(a.dataset.abilityId, {
+        event,
+        flavor,
+        rollMode,
+        speaker,
+      });
       break;
     case "item":
       dnd5e.documents.macro.rollItem(a.dataset.itemName);
