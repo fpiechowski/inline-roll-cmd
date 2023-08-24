@@ -51,39 +51,50 @@ function createSkill(match, options) {
   debug("createSkill, match:", match);
 
   const mode = getRollMode(match[1]);
-  const skillId = match[2];
+  const args = match[2].split(' ');
+  const skillId = args[1];
+  const actorId = args[2];
+  debug("args", args, "actorId", actorId);
+  
   const flavor = match[3];
   const skill = CONFIG.DND5E.skills[skillId]?.label ?? skillId;
   const title = game.i18n.format("DND5E.SkillPromptTitle", { skill });
   debug("mode", mode, "skillId", skillId);
 
-  return createButton(mode, "skill", { skillId }, flavor, title);
+  return createButton(mode, "skill", { skillId, actorId }, flavor, title);
 }
 
 function createAbility(match, options) {
   debug("createAbility, match:", match);
 
   const mode = getRollMode(match[1]);
-  const abilityId = match[2];
+  const args = match[2].split(' ');
+  const abilityId = args[1];
+  const actorId = args[2];
+  debug("args", args, "actorId", actorId);
+  
   const flavor = match[3];
   const ability = CONFIG.DND5E.abilities[abilityId] ?? "";
   const title = game.i18n.format("DND5E.AbilityPromptTitle", { ability });
   debug("mode", mode, "abilityId", abilityId);
 
-  return createButton(mode, "abilityCheck", { abilityId }, flavor, title);
+  return createButton(mode, "abilityCheck", { abilityId, actorId }, flavor, title);
 }
 
 function createSave(match, options) {
   debug("createSave, match:", match);
 
   const mode = getRollMode(match[1]);
-  const abilityId = match[2];
+  const args = match[2].split(' ');
+  const abilityId = args[1];
+  const actorId = args[2];
+  debug("args", args, "actorId", actorId);
   const flavor = match[3];
   const ability = CONFIG.DND5E.abilities[abilityId] ?? "";
   const title = game.i18n.format("DND5E.SavePromptTitle", { ability });
   debug("mode", mode, "abilityId", abilityId);
 
-  return createButton(mode, "save", { abilityId }, flavor, title);
+  return createButton(mode, "save", { abilityId, actorId }, flavor, title);
 }
 
 function createItem(match, options) {
@@ -182,17 +193,19 @@ async function onClick(event) {
 
   const flavor = a.dataset.flavor;
 
+  const actor = game.actors.get(a.dataset.actorId);
+
   switch (a.dataset.func) {
     case "skill":
       for (const token of tokens) {
-        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, token: token.document });
-        await token.actor.rollSkill(a.dataset.skillId, { event, flavor, rollMode, speaker });
+        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
+        await actor.rollSkill(a.dataset.skillId, { event, flavor, rollMode, speaker });
       }
       break;
     case "abilityCheck":
       for (const token of tokens) {
-        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, token: token.document });
-        await token.actor.rollAbilityTest(a.dataset.abilityId, {
+        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
+        await actor.rollAbilityTest(a.dataset.abilityId, {
           event,
           flavor,
           rollMode,
@@ -202,8 +215,8 @@ async function onClick(event) {
       break;
     case "save":
       for (const token of tokens) {
-        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, token: token.document });
-        await token.actor.rollAbilitySave(a.dataset.abilityId, {
+        const speaker = ChatMessage.getSpeaker({ scene: canvas.scene, actor: actor });
+        await actor.rollAbilitySave(a.dataset.abilityId, {
           event,
           flavor,
           rollMode,
